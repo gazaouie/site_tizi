@@ -91,38 +91,43 @@ app.delete('/users/:id', async (req, res) => {
   }
 });
 
-// Alter John Doe's date of birth
-const alterJohnDoeDOB = async () => {
-  try {
-    const user = await User.findOneAndUpdate(
-      { name: 'Alice Johnson' },
-      { dateOfBirth: new Date('1991-03-03') },
-      { new: true, runValidators: true }
-    );
-    if (user) {
-      console.log('John Doe\'s date of birth updated:', user);
-    } else {
-      console.log('John Doe not found');
+// Handle form submission
+document.addEventListener('DOMContentLoaded', () => {
+  const registerForm = document.getElementById('registerForm');
+  registerForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const dateOfBirth = document.getElementById('dateOfBirth').value;
+    const address = document.getElementById('address').value;
+
+    const user = {
+      name,
+      dateOfBirth,
+      address
+    };
+
+    try {
+      const response = await fetch('/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      });
+
+      if (response.ok) {
+        const newUser = await response.json();
+        console.log('User registered:', newUser);
+        alert('User registered successfully!');
+      } else {
+        const error = await response.json();
+        console.error('Error registering user:', error);
+        alert('Error registering user');
+      }
+    } catch (error) {
+      console.error('Error registering user:', error);
+      alert('Error registering user');
     }
-  } catch (error) {
-    console.error('Error updating John Doe\'s date of birth:', error);
-  }
-};
-
-// Add a new user
-const addNewUser = async () => {
-  try {
-    const newUser = new User({
-      name: 'Alice Johnson',
-      dateOfBirth: new Date('2000-07-20'),
-      address: '789 Oak St'
-    });
-    await newUser.save();
-    console.log('New user added:', newUser);
-  } catch (error) {
-    console.error('Error adding new user:', error);
-  }
-};
-
-// Call the function to add a new user
-alterJohnDoeDOB();
+  });
+});
