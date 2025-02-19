@@ -1,6 +1,6 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import { MongoClient, ServerApiVersion } from 'mongodb';
+const express = require('express');
+const mongoose = require('mongoose');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const app = express();
 app.use(express.json());
@@ -89,45 +89,4 @@ app.delete('/users/:id', async (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
-});
-
-// Handle form submission
-document.addEventListener('DOMContentLoaded', () => {
-  const registerForm = document.getElementById('registerForm');
-  registerForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const name = document.getElementById('name').value;
-    const dateOfBirth = document.getElementById('dateOfBirth').value;
-    const address = document.getElementById('address').value;
-
-    const user = {
-      name,
-      dateOfBirth,
-      address
-    };
-
-    try {
-      const response = await fetch('/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-      });
-
-      if (response.ok) {
-        const newUser = await response.json();
-        console.log('User registered:', newUser);
-        alert('User registered successfully!');
-      } else {
-        const error = await response.json();
-        console.error('Error registering user:', error);
-        alert('Error registering user');
-      }
-    } catch (error) {
-      console.error('Error registering user:', error);
-      alert('Error registering user');
-    }
-  });
 });
