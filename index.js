@@ -1,6 +1,6 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+import express, { json } from 'express';
+import { connect, Schema, model } from 'mongoose';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const app = express();
 app.use(express.json());
